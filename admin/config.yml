@@ -1,0 +1,26 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "uploads"
+public_folder: "/uploads"
+
+locale: "es"
+
+collections:
+  - name: "productos"
+    label: "Productos"
+    folder: "productos"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Nombre", name: "nombre", widget: "string" }
+      - { label: "Categoría", name: "categoria", widget: "select", options: ["Tops", "Partes de abajo", "Sets & Looks"] }
+      - { label: "Precio tarjeta", name: "precio_tarjeta", widget: "number" }
+      - { label: "Cuotas sin interés", name: "cuotas", widget: "select", options: ["1", "3", "6", "12"], default: "3" }
+      - { label: "Precio transferencia", name: "precio_transf", widget: "number", required: false }
+      - { label: "Talles disponibles", name: "talles", widget: "select", multiple: true, options: ["XS", "S", "M", "L", "XL"] }
+      - { label: "Badge", name: "badge", widget: "select", required: false, options: ["", "new", "sale", "hot"], default: "" }
+      - { label: "Descripción", name: "descripcion", widget: "text", required: false }
+      - { label: "Fotos", name: "fotos", widget: "list", field: { label: "Foto", name: "foto", widget: "image" } }
+      - { label: "Activo", name: "activo", widget: "boolean", default: true }
