@@ -9,5 +9,7 @@ talles:
   - S
 badge: new
 descripcion: tiro bajo, rigido
+fotos:
+  - /uploads/img-20260504-wa0059-1-.jpg
 activo: true
 ---
