@@ -1,7 +1,7 @@
 ---
-nombre: jens
+nombre: jeans
 categoria: Partes de abajo
-precio_tarjeta: 52499
+precio_tarjeta: 52800
 cuotas: "3"
 precio_transf: 43000
 talles:
