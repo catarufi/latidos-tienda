@@ -1,5 +1,5 @@
 ---
-nombre: jeans start
+nombre: jeans star
 categoria: Partes de abajo
 precio_tarjeta: 52800
 cuotas: "3"
