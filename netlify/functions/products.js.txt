@@ -1,0 +1,30 @@
+// netlify functions/products.js
+exports.handler = async () => {
+  const products = [
+    {
+      id: "1",
+      name: "Jeans Star",
+      desc: "Tiro bajo, rígido",
+      priceTarjeta: 12000,
+      priceTransf: 11000,
+      sizes: ["XS", "S", "M"],
+      badge: "new",
+      photos: ["/uploads/jeans-star.jpg"],
+      cat: "abajo"
+    },
+    {
+      id: "2",
+      name: "Top Shine",
+      desc: "Brillo metálico",
+      priceTarjeta: 8000,
+      sizes: ["S", "M"],
+      photos: ["/uploads/top-shine.jpg"],
+      cat: "arriba"
+    }
+  ];
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify(products)
+  };
+};
