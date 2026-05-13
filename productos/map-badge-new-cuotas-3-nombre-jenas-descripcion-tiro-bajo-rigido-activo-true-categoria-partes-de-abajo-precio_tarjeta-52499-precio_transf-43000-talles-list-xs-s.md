@@ -1,6 +1,6 @@
 ---
 nombre: jeans star
-categoria: Parte de arriba
+categoria: Parte de abajo
 precio_tarjeta: 52800
 cuotas: "3"
 precio_transf: 43000
