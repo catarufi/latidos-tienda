@@ -1,30 +1,44 @@
-// netlify functions/products.js
-exports.handler = async () => {
-  const products = [
-    {
-      id: "1",
-      name: "Jeans Star",
-      desc: "Tiro bajo, rígido",
-      priceTarjeta: 12000,
-      priceTransf: 11000,
-      sizes: ["XS", "S", "M"],
-      badge: "new",
-      photos: ["/uploads/jeans-star.jpg"],
-      cat: "abajo"
-    },
-    {
-      id: "2",
-      name: "Top Shine",
-      desc: "Brillo metálico",
-      priceTarjeta: 8000,
-      sizes: ["S", "M"],
-      photos: ["/uploads/top-shine.jpg"],
-      cat: "arriba"
-    }
-  ];
+const fs = require("fs");
+const path = require("path");
+const matter = require("gray-matter");
 
-  return {
-    statusCode: 200,
-    body: JSON.stringify(products)
-  };
+exports.handler = async () => {
+  try {
+    // Ruta a la carpeta "productos"
+    const dir = path.join(__dirname, "../../productos");
+
+    // Leer todos los archivos .md
+    const files = fs.readdirSync(dir).filter(f => f.endsWith(".md"));
+
+    // Parsear cada archivo con gray-matter
+    const products = files.map(file => {
+      const content = fs.readFileSync(path.join(dir, file), "utf8");
+      const data = matter(content).data;
+
+      return {
+        id: file.replace(".md", ""),
+        name: data.nombre,
+        desc: data.descripcion,
+        priceTarjeta: data.precio_tarjeta,
+        priceTransf: data.precio_transf,
+        cuotas: data.cuotas,
+        sizes: data.talles || [],
+        badge: data.badge || "",
+        photos: data.fotos || [],
+        cat: data.categoria,
+        activo: data.activo
+      };
+    }).filter(p => p.activo);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(products)
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "Error al cargar productos" })
+    };
+  }
 };
