@@ -1701,22 +1701,66 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-// ─── INIT ────────────────────────────────────────────
-async function init() {
-  const cloud = await loadProductsFromCloud();
-  if (cloud.length > 0) products = cloud;
-  renderStore('all');
-  updateCartUI();
-  function checkRoute() {
-    if (window.location.hash === '#admin') {
-      history.replaceState(null, '', window.location.pathname);
-      goAdmin();
+
+<script>
+  async function loadProductsFromCloud() {
+    try {
+      const res = await fetch('/.netlify/functions/products');
+      if (!res.ok) throw new Error('Error al cargar productos');
+      return await res.json();
+    } catch (e) {
+      console.error(e);
+      return [];
     }
   }
-  checkRoute();
-  window.addEventListener('hashchange', checkRoute);
-}
-init();
+
+  function renderStore(filter) {
+    const container = document.getElementById('store');
+    if (!container) return;
+    container.innerHTML = '';
+
+    products
+      .filter(p => filter === 'all' || p.cat === filter)
+      .forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <p>Precio tarjeta: $${p.priceTarjeta}</p>
+          ${p.priceTransf ? `<p>Precio transferencia: $${p.priceTransf}</p>` : ''}
+          <p>Talles: ${p.sizes.join(', ')}</p>
+          ${p.badge ? `<span>${p.badge}</span>` : ''}
+          ${p.photos.length ? `<img src="${p.photos[0]}" alt="${p.name}">` : ''}
+        `;
+        container.appendChild(card);
+      });
+  }
+
+  let products = [];
+
+  // ─── INIT ────────────────────────────────────────────
+  async function init() {
+    const cloud = await loadProductsFromCloud();
+    if (cloud.length > 0) products = cloud;
+
+    renderStore('all');
+    updateCartUI();
+
+    function checkRoute() {
+      if (window.location.hash === '#admin') {
+        history.replaceState(null, '', window.location.pathname);
+        goAdmin();
+      }
+    }
+
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+  }
+
+  init();
 </script>
 </body>
 </html>
+
+
